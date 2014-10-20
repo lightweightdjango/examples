@@ -18,6 +18,8 @@ class Command(BaseCommand):
     
     def handle(self, *args, **options):
         """Request pages and build output."""
+        settings.DEBUG = False
+        settings.COMPRESS_ENABLED = True
         if args:
             pages = args
             available = list(get_pages())
@@ -35,6 +37,7 @@ class Command(BaseCommand):
             os.mkdir(settings.SITE_OUTPUT_DIRECTORY)
             os.makedirs(settings.STATIC_ROOT)
         call_command('collectstatic', interactive=False, clear=True, verbosity=0)
+        call_command('compress', interactive=False, force=True)
         client = Client()
         for page in pages:
             url = reverse('page', kwargs={'slug': page})
