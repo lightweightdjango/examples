@@ -9,7 +9,37 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
 </head>
-<body>
+<body id="{% block body-id %}body{% endblock %}">
+    {% block top-nav-wrapper %}
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Rapid Prototypes</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li {% if slug == 'index' %}class="active"{% endif %}>
+                        <a href="/">Home</a>
+                    </li>
+                    <li {% if slug == 'contact' %}class="active"{% endif %}>
+                        <a href="{% url 'page' 'contact' %}">Contact</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li {% if slug == 'login' %}class="active"{% endif %}>
+                        <a href="{% url 'page' 'login' %}">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
     {% block content %}{% endblock %}
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
