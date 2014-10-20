@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="{{ description|default:'Default prototype description' }}">
+    <meta name="keywords" content="{{ keywords|default:'prototype' }}">
     <title>{% block title %}Rapid Prototypes{% endblock %}</title>
     {% compress css %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -28,6 +30,9 @@
                 <ul class="nav navbar-nav">
                     <li {% if slug == 'index' %}class="active"{% endif %}>
                         <a href="/">Home</a>
+                    </li>
+                    <li {% if slug == 'pricing' %}class="active"{% endif %}>
+                        <a href="{% url 'page' 'pricing' %}">Pricing</a>
                     </li>
                     <li {% if slug == 'contact' %}class="active"{% endif %}>
                         <a href="{% url 'page' 'contact' %}">Contact</a>
