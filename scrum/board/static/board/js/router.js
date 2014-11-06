@@ -7,6 +7,9 @@
         initialize: function (options) {
             this.contentElement = '#content';
             this.current = null;
+            this.header = new app.views.HeaderView();
+            $('body').prepend(this.header.el);
+            this.header.render();
             Backbone.history.start();
         },
         home: function () {
@@ -28,6 +31,7 @@
                     login = new app.views.LoginView();
                     $(this.contentElement).after(login.el);
                     login.on('done', function () {
+                        this.header.render();
                         $(this.contentElement).show();
                         original.apply(this, args);
                     }, this);
@@ -39,7 +43,6 @@
         },
         render: function (view) {
             if (this.current) {
-                this.current.undelegateEvents();
                 this.current.$el = $();
                 this.current.remove();
             }

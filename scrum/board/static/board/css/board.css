@@ -1,0 +1,98 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700,900);
+
+/* Generic
+==================== */
+body {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'Lato', Helvetica, sans-serif;
+}
+
+a { text-decoration: none; }
+
+button, a.button {
+    font-size: 13px;
+    padding: 5px 8px;
+    border: 2px solid #222;
+    background-color: #FFF;
+    color: #222;
+    transition: background 200ms ease-out;
+}
+
+button:hover, a.button:hover {
+    background-color: #222;
+    color: #FFF;
+}
+
+input, textarea {
+    background: white;
+    font-family: inherit;
+    border: 1px solid #cccccc;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    display: block;
+    font-size: 18px;
+    margin: 0 0 16px 0;
+    padding: 8px
+}
+
+#content {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+.hide {
+    display: none;
+}
+
+.error {
+    color: #cd0000;
+    margin: 8px 0;
+    display: block;
+}
+
+/* Header
+==================== */
+header {
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 1px solid #CCC;
+}
+
+header .title {
+    font-weight: 900;
+    padding-left: 25px;
+}
+
+header nav {
+    display: inline-block;
+    float: right;
+    padding-right: 25px;
+}
+
+header nav a {
+    margin-left: 8px;
+}
+
+header nav a:hover {
+    background: #222;
+    color: #FFF;
+}
+
+/* Login
+==================== */
+#login {
+    width: 100%;
+}
+
+#login form {
+    width: 300px;
+    margin: 0 auto;
+    padding: 25px;
+}
+
+#login form input {
+    margin-bottom: 15px;
+}
+
+#login form label, #login form input {
+    display: block;
+}
