@@ -10,6 +10,15 @@
         <script type="text/html" id="home-template">
             <h1>Welcome to my Scrum Board Project!</h1>
         </script>
+        <script type="text/html" id="login-template">
+            <form action="" method="post">
+                <label for="id_username">Username</label>
+                <input id="id_username" type="text" name="username" maxlength="30" required />
+                <label for="id_password">Password</label>
+                <input id="id_password" type="password" name="password" required />
+                <button type="submit">Login</button>
+            </form>
+        </script>
     </head>
     <body>
     
@@ -23,7 +32,9 @@
                 "models": {},
                 "collections": {},
                 "views": {},
-                "router": null
+                "router": null,
+                "apiRoot": "{% url 'api-root' %}",
+                "apiLogin": "{% url 'api-token' %}"
             }
         </script>
         <script src="{% static 'board/js/app.js' %}"></script>
