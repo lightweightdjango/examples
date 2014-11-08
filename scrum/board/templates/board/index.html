@@ -89,6 +89,30 @@
         <script type="text/html" id="task-item-template">
             <%- task.get('name') %>
         </script>
+        <script type="text/html" id="task-detail-template">
+            <div data-field="name" class="name">
+                <%- task.get('name') %>
+            </div>
+            <div data-field="description" class="description">
+                <%- task.get('description') %>
+            </div>
+            <div class="with-label">
+                <div class="label">Due:</div>
+                <div data-field="due" class="due date">
+                    <%- task.get('due') || empty %>
+                </div>
+            </div>
+            <div class="with-label">
+                <div class="label">Assigned To:</div>
+                <div data-field="assigned" class="assigned">
+                    <%- task.get('assigned') || empty %>
+                </div>
+            </div>
+            <form>
+                <button class="cancel" type="submit">Close</button>
+                <button class="save" hidden type="submit">Save</button>
+            </form>
+        </script>
     </head>
     <body>
     
