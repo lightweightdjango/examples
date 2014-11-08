@@ -517,6 +517,19 @@
                         view.unlock();
                     }
                 }, this);
+                this.socket.on('task:add', function (task, result) {
+                    var model = app.tasks.push({id: task});
+                    model.fetch();
+                }, this);
+                this.socket.on('task:update', function (task, result) {
+                    var model = app.tasks.get(task);
+                    if (model) {
+                        model.fetch();
+                    }
+                }, this);
+                this.socket.on('task:remove', function (task) {
+                    app.tasks.remove({id: task});
+                }, this);
             }
         },
         remove: function () {
