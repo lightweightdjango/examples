@@ -1,3 +1,6 @@
+import requests
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from rest_framework import authentication, permissions, viewsets, filters
@@ -31,7 +34,42 @@ class DefaultsMixin(object):
     )
 
 
-class SprintViewSet(DefaultsMixin, viewsets.ModelViewSet):
+class UpdateHookMixin(object):
+    """Mixin class to send update information to the websocket server."""
+
+    def _build_hook_url(self, obj):
+        if isinstance(obj, User):
+            model = 'user'
+        else:
+            model = obj.__class__.__name__.lower()
+        return '{}://{}/{}/{}'.format(
+            'https' if settings.WATERCOOLER_SECURE else 'http',
+            settings.WATERCOOLER_SERVER, model, obj.pk)
+
+    def _send_hook_request(self, obj, method):
+        url = self._build_hook_url(obj)
+        try:
+            response = requests.request(method, url, timeout=0.5)
+            response.raise_for_status()
+        except requests.exceptions.ConnectionError:
+            # Host could not be resolved or the connection was refused
+            pass
+        except requests.exceptions.Timeout:
+            # Request timed out
+            pass
+        except requests.exceptions.RequestException:
+            # Server responsed with 4XX or 5XX status code
+            pass
+
+    def post_save(self, obj, created=False):
+        method = 'POST' if created else 'PUT'
+        self._send_hook_request(obj, method)
+
+    def pre_delete(self, obj):
+        self._send_hook_request(obj, 'DELETE')
+
+
+class SprintViewSet(DefaultsMixin, UpdateHookMixin, viewsets.ModelViewSet):
     """API endpoint for listing and creating sprints."""
     
     queryset = Sprint.objects.order_by('end')
@@ -41,7 +79,7 @@ class SprintViewSet(DefaultsMixin, viewsets.ModelViewSet):
     ordering_fields = ('end', 'name', )
     
 
-class TaskViewSet(DefaultsMixin, viewsets.ModelViewSet):
+class TaskViewSet(DefaultsMixin, UpdateHookMixin, viewsets.ModelViewSet):
     """API endpoint for listing and creating tasks."""
     
     queryset = Task.objects.all()
@@ -51,7 +89,7 @@ class TaskViewSet(DefaultsMixin, viewsets.ModelViewSet):
     ordering_fields = ('name', 'order', 'started', 'due', 'completed', )
     
     
-class UserViewSet(DefaultsMixin, viewsets.ReadOnlyModelViewSet):
+class UserViewSet(DefaultsMixin, UpdateHookMixin, viewsets.ReadOnlyModelViewSet):
     """API endpoint for listing users."""
     
     lookup_field = User.USERNAME_FIELD
