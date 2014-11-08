@@ -96,3 +96,23 @@ header nav a:hover {
 #login form label, #login form input {
     display: block;
 }
+
+/* Sprint Listing
+==================== */
+
+.sprints {
+    margin-top: 25px;
+}
+
+.sprints a.sprint {
+    padding: 25px;
+    float: left;
+    text-align: center;
+    background: #000;
+    margin: 8px 8px 0 0;
+    color: #FFF;
+}
+
+.sprints a.sprint span { 
+    font-size: 10px;
+}
