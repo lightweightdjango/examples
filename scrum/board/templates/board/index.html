@@ -55,6 +55,16 @@
                 <button type="submit">Create</button>
             </form>
         </script>
+        <script type="text/html" id="sprint-template">
+            <% if (sprint !== null) { %>
+                <h2><%- sprint.get('name') %></h2>
+                <span class="due-date">Due <%- sprint.get('end') %></span>
+                <p class="description"><%- sprint.get('description') %></p>
+                <div class="tasks"></div>
+            <% } else { %>
+                <h1 class="loading">Loading...</h1>
+            <% } %>
+        </script>
     </head>
     <body>
     

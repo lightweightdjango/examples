@@ -155,9 +155,31 @@
             window.location = '/';
         }
     });
+
+    var SprintView = TemplateView.extend({
+        templateName: '#sprint-template',
+        initialize: function (options) {
+            var self = this;
+            TemplateView.prototype.initialize.apply(this, arguments);
+            this.sprintId = options.sprintId;
+            this.sprint = null;
+            app.collections.ready.done(function () {
+                self.sprint = app.sprints.push({id: self.sprintId});
+                self.sprint.fetch({
+                    success: function () {
+                        self.render();
+                    }
+                });
+            });
+        },
+        getContext: function () {
+            return {sprint: this.sprint};
+        }
+    });
     
     app.views.HomepageView = HomepageView;
     app.views.LoginView = LoginView;
     app.views.HeaderView = HeaderView;
+    app.views.SprintView = SprintView;
     
 })(jQuery, Backbone, _, app);
