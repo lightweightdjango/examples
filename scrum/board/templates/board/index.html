@@ -69,6 +69,13 @@
                 <h1 class="loading">Loading...</h1>
             <% } %>
         </script>
+        <script type="text/html" id="status-template">
+            <h4><%- title %></h4>
+            <div class="list"></div>
+            <% if (sprint === null) { %>
+                <button class="add" type="submit">Add Task</button>
+            <% } %>
+        </script>
     </head>
     <body>
     

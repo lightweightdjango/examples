@@ -156,26 +156,84 @@
         }
     });
 
+    var StatusView = TemplateView.extend({
+        tagName: 'section',
+        className: 'status',
+        templateName: '#status-template',
+        initialize: function (options) {
+            TemplateView.prototype.initialize.apply(this, arguments);
+            this.sprint = options.sprint;
+            this.status = options.status;
+            this.title = options.title;
+        },
+        getContext: function () {
+            return {sprint: this.sprint, title: this.title};
+        }
+    });
+
     var SprintView = TemplateView.extend({
         templateName: '#sprint-template',
         initialize: function (options) {
             var self = this;
             TemplateView.prototype.initialize.apply(this, arguments);
-            this.sprintId = options.sprintId; 
+            this.sprintId = options.sprintId;
             this.sprint = null;
+            this.tasks = [];
+            this.statuses = {
+                unassigned: new StatusView({
+                    sprint: null, status: 1, title: 'Backlog'}),
+                todo: new StatusView({
+                    sprint: this.sprintId, status: 1, title: 'Not Started'}),
+                active: new StatusView({
+                    sprint: this.sprintId, status: 2, title: 'In Development'}),
+                testing: new StatusView({
+                    sprint: this.sprintId, status: 3, title: 'In Testing'}),
+                done: new StatusView({
+                    sprint: this.sprintId, status: 4, title: 'Completed'})
+            };
             app.collections.ready.done(function () {
+                app.tasks.on('add', self.addTask, self);
                 app.sprints.getOrFetch(self.sprintId).done(function (sprint) {
                     self.sprint = sprint;
                     self.render();
+                    // Add any current tasks
+                    app.tasks.each(self.addTask, self);
+                    // Fetch tasks for the current sprint
+                    sprint.fetchTasks();
                 }).fail(function (sprint) {
                     self.sprint = sprint;
                     self.sprint.invalid = true;
                     self.render();
                 });
+                // Fetch unassigned tasks
+                app.tasks.getBacklog();
             });
         },
         getContext: function () {
             return {sprint: this.sprint};
+        },
+        render: function () {
+            TemplateView.prototype.render.apply(this, arguments);
+            _.each(this.statuses, function (view, name) {
+                $('.tasks', this.$el).append(view.el);
+                view.delegateEvents();
+                view.render();
+            }, this);
+            _.each(this.tasks, function (task) {
+                this.renderTask(task);
+            }, this);
+        },
+        addTask: function (task) {
+            if (task.inBacklog() || task.inSprint(this.sprint)) {
+                this.tasks[task.get('id')] = task;
+                this.renderTask(task);
+            }
+        },
+        renderTask: function (task) {
+            var column = task.statusClass(),
+                container = this.statuses[column],
+                html = _.template('<div><%- task.get("name") %></div>', {task: task});
+            $('.list', container.$el).append(html);
         }
     });
     
