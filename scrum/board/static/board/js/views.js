@@ -179,7 +179,11 @@
         className: 'status',
         templateName: '#status-template',
         events: {
-            'click button.add': 'renderAddForm'
+            'click button.add': 'renderAddForm',
+            'dragenter': 'enter',
+            'dragover': 'over',
+            'dragleave': 'leave',
+            'drop': 'drop'
         },
         initialize: function (options) {
             TemplateView.prototype.initialize.apply(this, arguments);
@@ -203,6 +207,29 @@
         },
         addTask: function (view) {
             $('.list', this.$el).append(view.el);
+        },
+        enter: function (event) {
+            event.originalEvent.dataTransfer.effectAllowed = 'move';
+            event.preventDefault();
+            this.$el.addClass('over');
+        },
+        over: function (event) {
+            event.originalEvent.dataTransfer.dropEffect = 'move';
+            event.preventDefault();
+            return false;
+        },
+        leave: function (event) {
+            this.$el.removeClass('over');
+        },
+        drop: function (event) {
+            var dataTransfer = event.originalEvent.dataTransfer,
+                task = dataTransfer.getData('application/model');
+            if (event.stopPropagation) {
+                event.stopPropagation();
+            }
+            // TODO: Handle changing the task status.
+            this.trigger('drop', task);
+            this.leave();
         }
     });
 
@@ -336,6 +363,12 @@
             this.trigger('drop', task);
             this.leave();
             return false;
+        },
+        lock: function () {
+            this.$el.addClass('locked');
+        },
+        unlock: function () {
+            this.$el.removeClass('locked');
         }
     });
 
@@ -359,6 +392,15 @@
                 done: new StatusView({
                     sprint: this.sprintId, status: 4, title: 'Completed'})
             };
+            _.each(this.statuses, function (view, name) {
+                view.on('drop', function (model) {
+                    this.socket.send({
+                        model: 'task',
+                        id: model.get('id'),
+                        action: 'drop'
+                    });
+                }, this);
+            }, this);
             this.socket = null;
             app.collections.ready.done(function () {
                 app.tasks.on('add', self.addTask, self);
@@ -436,6 +478,18 @@
             var links = this.sprint && this.sprint.get('links');
             if (links && links.channel) {
                 this.socket = new app.Socket(links.channel);
+                this.socket.on('task:dragstart', function (task) {
+                    var view = this.tasks[task];
+                    if (view) {
+                        view.lock();
+                    }
+                }, this);
+                this.socket.on('task:dragend task:drop', function (task) {
+                    var view = this.tasks[task];
+                    if (view) {
+                        view.unlock();
+                    }
+                }, this);
             }
         },
         remove: function () {

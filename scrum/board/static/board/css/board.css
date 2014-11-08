@@ -177,6 +177,14 @@ header nav a:hover {
     border: 1px black dotted;
 }
 
+.tasks .status.over {
+    border: 1px black dotted;
+}
+
+.tasks .task-item.locked {
+    opacity: 0.5;
+}
+
 /* Task Detail
 ==================== */
 .task-detail {
