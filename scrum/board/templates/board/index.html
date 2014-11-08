@@ -76,6 +76,16 @@
                 <button class="add" type="submit">Add Task</button>
             <% } %>
         </script>
+        <script type="text/html" id="new-task-template">
+          <form class="add-task" action="" method="post">
+              <label for="id_name">Task Name</label>
+              <input id="id_name" type="text" name="name" maxlength="100" required />
+              <label for="id_description">Description</label>
+              <textarea id="id_description" name="description"></textarea>
+              <button class="create" type="submit">Create</button>
+              <button class="cancel" type="submit">Cancel</button>
+          </form>
+        </script>
     </head>
     <body>
     
