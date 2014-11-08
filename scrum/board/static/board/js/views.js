@@ -161,14 +161,16 @@
         initialize: function (options) {
             var self = this;
             TemplateView.prototype.initialize.apply(this, arguments);
-            this.sprintId = options.sprintId;
+            this.sprintId = options.sprintId; 
             this.sprint = null;
             app.collections.ready.done(function () {
-                self.sprint = app.sprints.push({id: self.sprintId});
-                self.sprint.fetch({
-                    success: function () {
-                        self.render();
-                    }
+                app.sprints.getOrFetch(self.sprintId).done(function (sprint) {
+                    self.sprint = sprint;
+                    self.render();
+                }).fail(function (sprint) {
+                    self.sprint = sprint;
+                    self.sprint.invalid = true;
+                    self.render();
                 });
             });
         },
