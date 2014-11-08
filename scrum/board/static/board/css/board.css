@@ -167,3 +167,36 @@ header nav a:hover {
     margin: 5px 0;
     padding: 3px;
 }
+
+/* Task Detail
+==================== */
+.task-detail {
+    width: 100%;
+    margin: 5px 0;
+    background-color: #FFF;
+    padding: 8px;
+}
+
+.task-detail div {
+    margin-bottom: 10px;
+}
+
+.task-detail .name, .task-detail .description {
+    border-bottom: 1px dotted #333;
+}
+
+.task-detail .with-label {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+[contenteditable=true]:hover {
+    background: #EEE;
+}
+
+[contenteditable=true]:focus {
+    background: #FFF;
+}
