@@ -161,3 +161,9 @@ header nav a:hover {
 .task-detail input, .task-detail textarea {
     width: 90%;
 }
+
+.tasks .task-item {
+    width: 100%;
+    margin: 5px 0;
+    padding: 3px;
+}
