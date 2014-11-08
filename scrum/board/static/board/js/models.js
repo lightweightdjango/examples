@@ -111,6 +111,33 @@
         },
         inSprint: function (sprint) {
             return sprint.get('id') == this.get('sprint');
+        },
+        moveTo: function (status, sprint, order) {
+            var updates = {
+                status: status,
+                sprint: sprint,
+                order: order
+            },
+            today = new Date().toISOString().replace(/T.*/g, '');
+            // Backlog Tasks 
+            if (!updates.sprint) {       
+                // Tasks moved back to the backlog
+                updates.status = 1;
+            }
+            // Started Tasks
+            if ((updates.status === 2) || 
+                (updates.status > 2 && !this.get('started'))) {
+                updates.started = today;
+            } else if (updates.status < 2 && this.get('started')) {
+                updates.started = null;
+            }
+            // Completed Tasks
+            if (updates.status === 4) {
+                updates.completed = today;
+            } else if (updates.status < 4 && this.get('completed')) {
+                updates.completed = null;
+            }
+            this.save(updates);
         }
     });
     app.models.User = BaseModel.extend({
