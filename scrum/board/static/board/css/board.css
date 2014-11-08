@@ -116,3 +116,8 @@ header nav a:hover {
 .sprints a.sprint span { 
     font-size: 10px;
 }
+
+.new-sprint {
+    border: 1px solid #CCC;
+    padding: 20px;
+}
