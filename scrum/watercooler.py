@@ -6,7 +6,6 @@ import signal
 import time
 import uuid
 
-from collections import defaultdict
 from urllib.parse import urlparse
 
 from django.core.signing import TimestampSigner, BadSignature, SignatureExpired
