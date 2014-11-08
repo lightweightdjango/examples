@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 
 from rest_framework import authentication, permissions, viewsets, filters
+from rest_framework.renderers import JSONRenderer
 
 from .forms import SprintFilter, TaskFilter
 from .models import Sprint, Task
@@ -48,8 +49,20 @@ class UpdateHookMixin(object):
 
     def _send_hook_request(self, obj, method):
         url = self._build_hook_url(obj)
+        if method in ('POST', 'PUT'):
+            # Build the body
+            serializer = self.get_serializer(obj)
+            renderer = JSONRenderer()
+            context = {'request': self.request}
+            body = renderer.render(serializer.data, renderer_context=context)
+        else:
+            body = None
+        headers = {
+            'content-type': 'application/json',
+        }
         try:
-            response = requests.request(method, url, timeout=0.5)
+            response = requests.request(method, url,
+                data=body, timeout=0.5, headers=headers)
             response.raise_for_status()
         except requests.exceptions.ConnectionError:
             # Host could not be resolved or the connection was refused
@@ -58,7 +71,7 @@ class UpdateHookMixin(object):
             # Request timed out
             pass
         except requests.exceptions.RequestException:
-            # Server responsed with 4XX or 5XX status code
+            # Server responded with 4XX or 5XX status code
             pass
 
     def post_save(self, obj, created=False):

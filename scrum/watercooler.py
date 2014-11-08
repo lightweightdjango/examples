@@ -97,10 +97,15 @@ class UpdateHandler(RequestHandler):
         self._broadcast(model, pk, 'remove')
 
     def _broadcast(self, model, pk, action):
+        try:
+            body = json.loads(self.request.body.decode('utf-8'))
+        except ValueError:
+            body = None
         message = json.dumps({
             'model': model,
             'id': pk,
             'action': action,
+            'body': body,
         })
         self.application.broadcast(message)
         self.write("Ok")

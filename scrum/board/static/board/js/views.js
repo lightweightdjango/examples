@@ -518,13 +518,22 @@
                     }
                 }, this);
                 this.socket.on('task:add', function (task, result) {
-                    var model = app.tasks.push({id: task});
-                    model.fetch();
+                    var model
+                    if (result.body) {
+                        model = app.tasks.add([result.body]);
+                    } else {
+                        model = app.tasks.push({id: task});
+                        model.fetch();
+                    }
                 }, this);
                 this.socket.on('task:update', function (task, result) {
                     var model = app.tasks.get(task);
                     if (model) {
-                        model.fetch();
+                        if (result.body) {
+                            model.set(result.body);
+                        } else {
+                            model.fetch();
+                        }
                     }
                 }, this);
                 this.socket.on('task:remove', function (task) {
