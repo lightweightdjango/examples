@@ -168,6 +168,15 @@ header nav a:hover {
     padding: 3px;
 }
 
+[draggable=true] {
+    cursor: move;
+}
+
+.tasks .task-item.over {
+    opacity: 0.5;
+    border: 1px black dotted;
+}
+
 /* Task Detail
 ==================== */
 .task-detail {
