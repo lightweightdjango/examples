@@ -8,7 +8,31 @@ by `Julia Elman <https://github.com/juliaelman>`_ and `Mark Lavin <https://githu
 Using These Examples
 --------------------------------
 
-The various folders and files in this repository correspond to the projects created throughout the book.
+Each example has been separated out into different branches that correspond to their chapter. Below you will find links to each chapters example code:
+
+`Chapter One, The World's Smallest Django Project <https://github.com/lightweightdjango/examples/tree/chapter-1>`_
+###################################################################################################################
+
+`Chapter Two, Stateless Web Application <https://github.com/lightweightdjango/examples/tree/chapter-2>`_
+########################################################################################################
+
+`Chapter Three, Building a Static Site Generator <https://github.com/lightweightdjango/examples/tree/chapter-3>`_
+#################################################################################################################
+
+`Chapter Four, Build a REST API <https://github.com/lightweightdjango/examples/tree/chapter-4>`_
+################################################################################################
+
+`Chapter Five, Client-Side Django with Backbone.js <https://github.com/lightweightdjango/examples/tree/chapter-5>`_
+###################################################################################################################
+
+`Chapter Six, Single Page Web Application <https://github.com/lightweightdjango/examples/tree/chapter-6>`_
+##########################################################################################################
+
+`Chapter Seven, Real-Time Django <https://github.com/lightweightdjango/examples/tree/chapter-7>`_
+#################################################################################################
+
+`Chapter Eight, Communication Between Django and Tornado <https://github.com/lightweightdjango/examples/tree/chapter-8>`_
+#########################################################################################################################
 
 
 Terms & Conditions
