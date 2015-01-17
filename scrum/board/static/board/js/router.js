@@ -43,6 +43,7 @@
         },
         render: function (view) {
             if (this.current) {
+                this.current.undelegateEvents();
                 this.current.$el = $();
                 this.current.remove();
             }
