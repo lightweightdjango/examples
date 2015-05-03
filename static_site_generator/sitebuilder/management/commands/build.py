@@ -12,10 +12,11 @@ def get_pages():
     for name in os.listdir(settings.SITE_PAGES_DIRECTORY):
         if name.endswith('.html'):
             yield name[:-5]
-           
+
+
 class Command(BaseCommand):
     help = 'Build static site output.'
-    
+
     def handle(self, *args, **options):
         """Request pages and build output."""
         settings.DEBUG = False
@@ -35,7 +36,7 @@ class Command(BaseCommand):
             if os.path.exists(settings.SITE_OUTPUT_DIRECTORY):
                 shutil.rmtree(settings.SITE_OUTPUT_DIRECTORY)
             os.mkdir(settings.SITE_OUTPUT_DIRECTORY)
-            os.makedirs(settings.STATIC_ROOT)
+        os.makedirs(settings.STATIC_ROOT)
         call_command('collectstatic', interactive=False, clear=True, verbosity=0)
         call_command('compress', interactive=False, force=True)
         client = Client()
