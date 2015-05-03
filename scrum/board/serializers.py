@@ -51,7 +51,7 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'sprint', 'status', 
             'status_display', 'order', 'assigned', 'started', 'due', 
             'completed', 'links', )
-        
+
     def get_status_display(self, obj):
         return obj.get_status_display()
 
@@ -88,7 +88,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         sprint = attrs.get('sprint')
-        status = int(attrs.get('status'))
+        status = attrs.get('status', Task.STATUS_TODO)
         started = attrs.get('started')
         completed = attrs.get('completed')
         if not sprint and status != Task.STATUS_TODO:
