@@ -16,6 +16,10 @@ def get_pages():
 
 class Command(BaseCommand):
     help = 'Build static site output.'
+    leave_locale_alone = True
+
+    def add_arguments(self, parser):
+        parser.add_argument('args', nargs='*')
 
     def handle(self, *args, **options):
         """Request pages and build output."""
