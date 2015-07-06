@@ -14,7 +14,7 @@
             return {};
         }
     });
-    
+
     var FormView = TemplateView.extend({
         events: {
             'submit form': 'submit',
@@ -86,7 +86,7 @@
             window.location.hash = '#sprint/' + model.get('id');
         }
     });
-    
+
     var HomepageView = TemplateView.extend({
         templateName: '#home-template',
         events: {
@@ -120,7 +120,7 @@
             });
         }
     });
-    
+
     var LoginView = FormView.extend({
         id: 'login',
         templateName: '#login-template',
@@ -129,7 +129,7 @@
             FormView.prototype.submit.apply(this, arguments);
             data = this.serializeForm(this.form);
             $.post(app.apiLogin, data)
-                .success($.proxy(this.loginSuccess, this))
+                .done($.proxy(this.loginSuccess, this))
                 .fail($.proxy(this.failure, this));
         },
         loginSuccess: function (data) {
@@ -137,7 +137,7 @@
             this.done();
         }
     });
-    
+
     var HeaderView = TemplateView.extend({
         tagName: 'header',
         templateName: '#header-template',
@@ -161,7 +161,7 @@
                 attributes = {};
             FormView.prototype.submit.apply(this, arguments);
             attributes = this.serializeForm(this.form);
-            app.collections.ready.done(function () {          
+            app.collections.ready.done(function () {
                 app.tasks.create(attributes, {
                     wait: true,
                     success: $.proxy(self.success, self),
@@ -226,7 +226,7 @@
         },
         submit: function (event) {
             FormView.prototype.submit.apply(this, arguments);
-            this.task.save(this.changes, { 
+            this.task.save(this.changes, {
                 wait: true,
                 success: $.proxy(this.success, this),
                 error: $.proxy(this.modelFailure, this)
@@ -356,7 +356,7 @@
         renderTask: function (task) {
             var view = new TaskItemView({task: task});
             _.each(this.statuses, function (container, name) {
-                if (container.sprint == task.get('sprint') && 
+                if (container.sprint == task.get('sprint') &&
                     container.status == task.get('status')) {
                     container.addTask(view);
                 }
@@ -365,10 +365,10 @@
             return view;
         }
     });
-    
+
     app.views.HomepageView = HomepageView;
     app.views.LoginView = LoginView;
     app.views.HeaderView = HeaderView;
     app.views.SprintView = SprintView;
-    
+
 })(jQuery, Backbone, _, app);
