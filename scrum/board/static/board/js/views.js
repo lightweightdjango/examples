@@ -14,7 +14,7 @@
             return {};
         }
     });
-    
+
     var FormView = TemplateView.extend({
         events: {
             'submit form': 'submit'
@@ -59,11 +59,11 @@
             this.remove();
         }
     });
-    
+
     var HomepageView = TemplateView.extend({
         templateName: '#home-template'
     });
-    
+
     var LoginView = FormView.extend({
         id: 'login',
         templateName: '#login-template',
@@ -72,7 +72,7 @@
             FormView.prototype.submit.apply(this, arguments);
             data = this.serializeForm(this.form);
             $.post(app.apiLogin, data)
-                .success($.proxy(this.loginSuccess, this))
+                .done($.proxy(this.loginSuccess, this))
                 .fail($.proxy(this.failure, this));
         },
         loginSuccess: function (data) {
@@ -80,7 +80,7 @@
             this.done();
         }
     });
-    
+
     var HeaderView = TemplateView.extend({
         tagName: 'header',
         templateName: '#header-template',
@@ -96,9 +96,9 @@
             window.location = '/';
         }
     });
-    
+
     app.views.HomepageView = HomepageView;
     app.views.LoginView = LoginView;
     app.views.HeaderView = HeaderView;
-    
+
 })(jQuery, Backbone, _, app);
