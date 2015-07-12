@@ -14,13 +14,13 @@ User = get_user_model()
 
 
 class SprintSerializer(serializers.ModelSerializer):
-    
+
     links = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Sprint
         fields = ('id', 'name', 'description', 'end', 'links', )
-            
+
     def get_links(self, obj):
         request = self.context['request']
         return {
@@ -34,7 +34,7 @@ class SprintSerializer(serializers.ModelSerializer):
                 channel=obj.pk
             ),
         }
-        
+
     def validate_end(self, value):
         new = self.instance is None
         changed = self.instance and self.instance.end != value
@@ -45,17 +45,17 @@ class SprintSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    
+
     assigned = serializers.SlugRelatedField(
-        slug_field=User.USERNAME_FIELD, required=False,
+        slug_field=User.USERNAME_FIELD, required=False, allow_null=True,
         queryset=User.objects.all())
     status_display = serializers.SerializerMethodField()
     links = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Task
-        fields = ('id', 'name', 'description', 'sprint', 'status', 
-            'status_display', 'order', 'assigned', 'started', 'due', 
+        fields = ('id', 'name', 'description', 'sprint', 'status',
+            'status_display', 'order', 'assigned', 'started', 'due',
             'completed', 'links', )
 
     def get_status_display(self, obj):
@@ -70,13 +70,13 @@ class TaskSerializer(serializers.ModelSerializer):
             'assigned': None
         }
         if obj.sprint_id:
-            links['sprint'] = reverse('sprint-detail', 
+            links['sprint'] = reverse('sprint-detail',
                 kwargs={'pk': obj.sprint_id}, request=request)
         if obj.assigned:
-            links['assigned'] = reverse('user-detail', 
+            links['assigned'] = reverse('user-detail',
                 kwargs={User.USERNAME_FIELD: obj.assigned}, request=request)
         return links
-    
+
     def validate_sprint(self, value):
         if self.instance and self.instance.pk:
             if value != self.instance.sprint:
@@ -110,15 +110,15 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-	
+
     full_name = serializers.CharField(source='get_full_name', read_only=True)
     links = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = User
-        fields = ('id', User.USERNAME_FIELD, 'full_name', 
+        fields = ('id', User.USERNAME_FIELD, 'full_name',
             'is_active', 'links' )
-    
+
     def get_links(self, obj):
         request = self.context['request']
         username = obj.get_username()
