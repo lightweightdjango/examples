@@ -29,8 +29,11 @@ settings.configure(
     INSTALLED_APPS=(
         'django.contrib.staticfiles',
     ),
-    TEMPLATE_DIRS=(
-        os.path.join(BASE_DIR, 'templates'),
+    TEMPLATES=(
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': (os.path.join(BASE_DIR, 'templates'), ),
+        },
     ),
     STATICFILES_DIRS=(
         os.path.join(BASE_DIR, 'static'),
