@@ -86,12 +86,17 @@ class UpdateHookMixin(object):
         )
         return signer.sign(value)
 
-    def post_save(self, obj, created=False):
-        method = 'POST' if created else 'PUT'
-        self._send_hook_request(obj, method)
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        self._send_hook_request(serializer.instance, 'POST')
 
-    def pre_delete(self, obj):
-        self._send_hook_request(obj, 'DELETE')
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        self._send_hook_request(serializer.instance, 'PUT')
+
+    def perform_destroy(self, instance):
+        self._send_hook_request(instance, 'DELETE')
+        super().perform_destroy(instance)
 
 
 class SprintViewSet(DefaultsMixin, UpdateHookMixin, viewsets.ModelViewSet):
